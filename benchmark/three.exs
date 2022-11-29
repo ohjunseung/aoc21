@@ -17,3 +17,7 @@ report = [
 Benchee.run(%{
   "three" => fn -> Aoc21.Three.count_power(report) end
 })
+
+# Result
+# Name            ips        average  deviation         median         99th %
+# three      393.79 K        2.54 μs  ±1572.04%        2.33 μs        3.29 μs
