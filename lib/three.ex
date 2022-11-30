@@ -18,9 +18,7 @@ defmodule Aoc21.Three do
     do_reduce(tail, result)
   end
 
-  def do_reduce([], result) do
-    result
-  end
+  def do_reduce([], result), do: result
 
   @spec count_gamma(%{integer => integer}, integer) :: integer
   def count_gamma(reduced, len) do

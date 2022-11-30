@@ -6,13 +6,7 @@ defmodule Aoc21.One do
 
   def do_count(report, total \\ 0)
 
-  def do_count([], total) do
-    total
-  end
-
-  def do_count([_head | []], total) do
-    total
-  end
+  def do_count([_head | []], total), do: total
 
   def do_count([head | tail], total) do
     [second | _] = tail
