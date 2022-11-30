@@ -4,11 +4,11 @@ defmodule Aoc21.One do
     do_count(report)
   end
 
-  def do_count(report, total \\ 0)
+  defp do_count(report, total \\ 0)
 
-  def do_count([_head | []], total), do: total
+  defp do_count([_head | []], total), do: total
 
-  def do_count([head | tail], total) do
+  defp do_count([head | tail], total) do
     [second | _] = tail
 
     if second > head do

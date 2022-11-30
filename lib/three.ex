@@ -6,9 +6,9 @@ defmodule Aoc21.Three do
     do_reduce(report)
   end
 
-  def do_reduce(_, result \\ %{0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 0})
+  defp do_reduce(_, result \\ %{0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 0})
 
-  def do_reduce([head | tail], result) do
+  defp do_reduce([head | tail], result) do
     result = if (head &&& 0b10000) == 0b10000, do: %{result | 0 => result[0] + 1}, else: result
     result = if (head &&& 0b01000) == 0b01000, do: %{result | 1 => result[1] + 1}, else: result
     result = if (head &&& 0b00100) == 0b00100, do: %{result | 2 => result[2] + 1}, else: result
@@ -18,7 +18,7 @@ defmodule Aoc21.Three do
     do_reduce(tail, result)
   end
 
-  def do_reduce([], result), do: result
+  defp do_reduce([], result), do: result
 
   @spec count_gamma(%{integer => integer}, integer) :: integer
   def count_gamma(reduced, len) do
