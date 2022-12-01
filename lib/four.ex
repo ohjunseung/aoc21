@@ -173,28 +173,77 @@ defmodule Aoc21.Four do
     board_a = Board.generate()
     board_b = Board.generate()
     board_c = Board.generate()
-    IO.inspect(Board.printf(board_a), label: "board a")
-    IO.inspect(Board.printf(board_b), label: "board b")
-    IO.inspect(Board.printf(board_c), label: "board c")
 
-    pool
-    |> Enum.each(fn draw ->
-      case Enum.find_index(board_a.state, &(&1 == draw)) do
+    a_result = do_run_board(board_a, pool)
+
+    a_result = [
+      state: Board.printf(elem(a_result, 0)),
+      score: elem(a_result, 1),
+      iteration: elem(a_result, 2)
+    ]
+
+    b_result = do_run_board(board_b, pool)
+
+    b_result = [
+      state: Board.printf(elem(b_result, 0)),
+      score: elem(b_result, 1),
+      iteration: elem(b_result, 2)
+    ]
+
+    c_result = do_run_board(board_c, pool)
+
+    c_result = [
+      state: Board.printf(elem(c_result, 0)),
+      score: elem(c_result, 1),
+      iteration: elem(c_result, 2)
+    ]
+
+    winner =
+      cond do
+        a_result[:iteration] <= b_result[:iteration] &&
+            a_result[:iteration] <= c_result[:iteration] ->
+          {"a", a_result[:score]}
+
+        b_result[:iteration] <= a_result[:iteration] &&
+            b_result[:iteration] <= c_result[:iteration] ->
+          {"b", b_result[:score]}
+
+        c_result[:iteration] <= a_result[:iteration] &&
+            c_result[:iteration] <= b_result[:iteration] ->
+          {"c", c_result[:score]}
+
+        true ->
+          {"None", 0}
+      end
+
+    IO.inspect(a_result, label: "board a result")
+    IO.inspect(b_result, label: "board b result")
+    IO.inspect(c_result, label: "board c result")
+    IO.puts("Winner is board #{elem(winner, 0)} with score: #{elem(winner, 1)}")
+  end
+
+  @spec do_run_board(Board.t(), [integer], integer) :: {Board.t(), integer, integer}
+  defp do_run_board(_, _, iteration \\ 1, score \\ 0)
+
+  defp do_run_board(board, [], iteration, score) do
+    {board, score, iteration}
+  end
+
+  defp do_run_board(board, [draw | tail], iteration, _) do
+    new_board =
+      case Enum.find_index(board.state, &(&1 == draw)) do
         i when is_integer(i) ->
           %Board{
-            board_a
-            | state: List.update_at(board_a.state, i, &Board.Marking.mark(&1, true))
+            board
+            | state: List.update_at(board.state, i, &Board.Marking.mark(&1, true))
           }
 
         _ ->
-          board_a
+          board
       end
 
-      if Board.check_win(board_a), do: Board.get_score(board_a, draw) |> IO.puts()
-    end)
-  end
-
-  @spec do_run_board(Board.t(), [integer]) :: {Board.t(), integer, integer}
-  defp do_run_board(board, pool) do
+    if Board.check_win(new_board),
+      do: do_run_board(new_board, [], iteration, Board.get_score(new_board, draw)),
+      else: do_run_board(new_board, tail, iteration + 1)
   end
 end
