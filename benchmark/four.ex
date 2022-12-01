@@ -20,6 +20,18 @@ defmodule Bench do
   def state_generator2(size, max_num) do
     0..(max_num - 1) |> Enum.shuffle() |> Enum.take(size)
   end
+
+  def score() do
+    import Aoc21.Four.Board.Marking
+    alias Aoc21.Four.Board, as: Board
+
+    board = %Board{
+      state: [1, 1, 1, 1, 1, mark(9, true)],
+      col_size: 1
+    }
+
+    Board.get_score(board, 2)
+  end
 end
 
 Benchee.run(%{
@@ -36,3 +48,11 @@ Benchee.run(%{
 # Enum           203.55 K
 # Recursion       60.27 K - 3.38x slower +11.68 μs
 # Enum is much more faster. Pretty logical because of `num in acc` waste too much time.
+
+Benchee.run(%{
+  "Score Check" => fn -> Bench.state_generator(25) end,
+})
+
+# Name                  ips        average  deviation         median         99th %
+# Score Check       59.38 K       16.84 μs    ±96.04%       16.24 μs       27.18 μs
+# This is my plain approach. Any other optimization is nice
