@@ -3,7 +3,7 @@ defmodule Aoc21.Five do
   def run(input) do
     input
     |> Enum.flat_map(&gen_coord(&1))
-    |> Enum.reduce(%{}, fn k, acc -> Map.put(acc, k, Map.get(acc, k, 1) + 1) end)
+    |> Enum.reduce(%{}, fn k, acc -> Map.put(acc, k, Map.get(acc, k, 0) + 1) end)
     |> Enum.filter(fn {_, v} -> v >= 2 end)
     |> Enum.count()
   end
